@@ -22,7 +22,7 @@ public class TempratureController : ControllerBase
     }
 
     [HttpGet("GetCurrentTemperature")]
-    public async Task<(string, string)> GetCurrentTemperature()
+    public async Task<IActionResult> GetCurrentTemperature()
     {
         try
         {
@@ -31,11 +31,21 @@ public class TempratureController : ControllerBase
             var responseData = await response.Content.ReadAsStringAsync();
             var res = responseData.Split(new string[] { "<div id=\"temperature\" class=\"temperature\">", "°C</div>" }, StringSplitOptions.None)[1];
             var Humidity = responseData.Split(new string[] { "<div class=\"humidity\">", "%</div>" }, StringSplitOptions.None)[1];
-            return (res, Humidity);
+            return Ok(
+                new TemperatureResponse
+                {
+                    Temperature = res.Trim(),
+                    Humidity = Humidity.Trim()
+                });
         }
         catch (Exception ex)
         {
-            return ("0.0", "0.0");
+            return Ok(
+                new TemperatureResponse
+                {
+                    Temperature = "0.0",
+                    Humidity = "0.0",
+                });
         }
     }
 
@@ -70,5 +80,12 @@ public class TempratureController : ControllerBase
         {
             Console.WriteLine($"Failed to send email: {ex.Message}");
         }
+    }
+
+
+    public class TemperatureResponse
+    {
+        public string? Temperature { get; set; }
+        public string? Humidity { get; set; }
     }
 }
