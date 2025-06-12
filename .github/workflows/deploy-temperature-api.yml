@@ -1,0 +1,36 @@
+name: Build and Deploy Temperature API
+
+on:
+  push:
+    branches: [ master ]  # Trigger on push to 'master'
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Setup .NET SDK
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: '8.0.x'
+
+    - name: Restore dependencies
+      run: dotnet restore Temperature.APi/Temperature.APi.csproj
+
+    - name: Build the project
+      run: dotnet build Temperature.APi/Temperature.APi.csproj --configuration Release --no-restore
+
+    - name: Publish the app
+      run: dotnet publish Temperature.APi/Temperature.APi.csproj --configuration Release --output publish
+
+    - name: Upload published files to server
+      uses: appleboy/scp-action@v0.1.4
+      with:
+        host: ${{ secrets.PROD_HOST }}
+        username: ${{ secrets.SSH_USER }}
+        key: ${{ secrets.SSH_KEY }}
+        source: "publish/*"
+        target: "C:/CSIPRODUCTION/Temp"
