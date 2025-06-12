@@ -8,6 +8,7 @@ namespace Temperature.APi.Controllers;
 [ApiController]
 public class TempratureController : ControllerBase
 {
+    //dffg
     //test if deploy work
 
     private const string SmtpServer = "smtp.gmail.com";
