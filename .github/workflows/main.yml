@@ -25,7 +25,7 @@ jobs:
 
     - name: Publish the app
       run: dotnet publish Temperature.APi/Temperature.APi.csproj --configuration Release --output publish
-      
+
     - name: Upload to server via SCP
       shell: bash
       run: |
@@ -35,4 +35,11 @@ jobs:
         ssh-keyscan -H 4.231.98.81 >> ~/.ssh/known_hosts
         scp -i ~/.ssh/id_rsa -r publish/* gitdeploy@4.231.98.81:"C:/CSIPRODUCTION/Temp"
 
-
+    - name: Restart Temperature API on server
+      shell: bash
+      run: |
+        ssh -i ~/.ssh/id_rsa gitdeploy@4.231.98.81 "powershell -Command \"
+        \$process = Get-Process -Name 'dotnet' -ErrorAction SilentlyContinue | Where-Object { \$_.'Path' -like '*Temperature.APi.dll' };
+        if (\$process) { \$process | Stop-Process -Force }
+        Start-Process 'dotnet' 'C:\CSIPRODUCTION\Temp\Temperature.APi.dll' -WindowStyle Hidden
+        \""
