@@ -15,6 +15,8 @@ builder.WebHost.UseKestrel(options =>
 });
 
 
+///// Configure Swagger to use the XML comments file
+
 var app = builder.Build();
 app.UseSwagger();
 app.UseSwaggerUI();
