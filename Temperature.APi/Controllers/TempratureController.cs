@@ -31,6 +31,14 @@ public class TempratureController : ControllerBase
         _client = client;
     }
 
+
+    [HttpGet("GugaTestIt")]
+    public IActionResult GugaTestIt()
+    {
+      return Ok("Guga Test It");
+    }
+
+
     [HttpGet("GetCurrentTemperature")]
     public async Task<IActionResult> GetCurrentTemperature()
     {
