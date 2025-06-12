@@ -1,7 +1,6 @@
 name: Build and Deploy Temperature API
 
 on:
-  workflow_dispatch:
   push:
     branches: [ master ]
 
@@ -27,36 +26,10 @@ jobs:
     - name: Publish the app
       run: dotnet publish Temperature.APi/Temperature.APi.csproj --configuration Release --output publish
 
-    - name: Upload published files to server via SCP
+    - name: Upload to server via SCP
       run: |
         mkdir -p ~/.ssh
-        echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
+        echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
         chmod 600 ~/.ssh/id_rsa
         ssh-keyscan -H 4.231.98.81 >> ~/.ssh/known_hosts
         scp -r publish/* gitdeploy@4.231.98.81:"C:/CSIPRODUCTION/Temp"
-      env:
-        SSH_PRIVATE_KEY: |
-          -----BEGIN OPENSSH PRIVATE KEY-----
-          b3BlbnNzaC1rZXktdjEAAAAABG5vbmUAAAAEbm9uZQAAAAAAAAABAAACFwAAAAdzc2gtcn
-          NhAAAAAwEAAQAAAgEAt/8rr0++XBuLFZk9CR/mMZpQkaJpNfrTb3fMnO012ANThjPdQuYn
-          +Ypf+D23IwFSnHogX2RIkYnCReKKHB9UFe1Z4+mS0pQBD6hBTqLeZGlRo8zX/cs9fBzdg4
-          wPO/xn61ndaCFAePFnDvMjH2wcVpiYP9yiSi0hQYlq+YFbPR17gpMYV1t6obXwpnfW9fSd
-          KOGnV31n4P89UryFiwxVwQ+Mv2WUCqbc8VvTIWLVIbuTL4sRMPdRHnpc6TF9TDJJ3KOhv6
-          msuaU9wzcHa04W8yrRtiDKdCqejE4rpeeKad0sGOP2RE9XfhvsHOK1m624ufHUPWcAlJ3S
-          fVn+fpcJhmCmm+goe4/NfgZAG9hyRK6DJ//PQtICo2FHpaJYLJqUVckR0tWH7CC8kN7+3t
-          H7dAZ8MB+3ZXtum/0pG/mHJQdjsl2gjuK43H05k9qLf69if/LFj7QYe9z3TJ/ZUKdBRtps
-          KF1OLgE740EQhYt/bHaUeTQv4rnG11W+vIL/TJKa51cQy8bmuLsYTa+pgves9I8QPP0aPQ
-          yvCBTt25B5R8gK6/Ib1K+TPAzZi0n7MlzYq2bXaGINGHPQMxdg/dKLW5NaDhHk+ZvdEnr2
-          /X6Vtr6qpQ8rfRntg3OwJ6i+ienMZhajOhwYgk8593l4vpniDt3Xa6fQZABnQAZ/E/toAL
-          kAAAdQNoI9eTaCPXkAAAAHc3NoLXJzYQAAAgEAt/8rr0++XBuLFZk9CR/mMZpQkaJpNfrT
-          b3fMnO012ANThjPdQuYn+Ypf+D23IwFSnHogX2RIkYnCReKKHB9UFe1Z4+mS0pQBD6hBTq
-          LeZGlRo8zX/cs9fBzdg4wPO/xn61ndaCFAePFnDvMjH2wcVpiYP9yiSi0hQYlq+YFbPR17
-          gpMYV1t6obXwpnfW9fSdKOGnV31n4P89UryFiwxVwQ+Mv2WUCqbc8VvTIWLVIbuTL4sRMP
-          dRHnpc6TF9TDJJ3KOhv6msuaU9wzcHa04W8yrRtiDKdCqejE4rpeeKad0sGOP2RE9Xfhvs
-          HOK1m624ufHUPWcAlJ3SfVn+fpcJhmCmm+goe4/NfgZAG9hyRK6DJ//PQtICo2FHpaJYLJ
-          qUVckR0tWH7CC8kN7+3tH7dAZ8MB+3ZXtum/0pG/mHJQdjsl2gjuK43H05k9qLf69if/LF
-          j7QYe9z3TJ/ZUKdBRtpsKF1OLgE740EQhYt/bHaUeTQv4rnG11W+vIL/TJKa51cQy8bmuL
-          sYTa+pgves9I8QPP0aPQyvCBTt25B5R8gK6/Ib1K+TPAzZi0n7MlzYq2bXaGINGHPQMxdg
-          /dKLW5NaDhHk+ZvdEnr2/X6Vtr6qpQ8rfRntg3OwJ6i+ienMZhajOhwYgk8593l4vpniDt
-          3Xa6fQZABnQAZ/E/toALkAAAADAQABAAACAApuEYjfiVfpS8oOpLIWt9LJ/5Ux0qr3q/Ke
-          -----END OPENSSH PRIVATE KEY-----
