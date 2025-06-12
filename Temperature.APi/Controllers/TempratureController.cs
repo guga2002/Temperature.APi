@@ -17,6 +17,7 @@ public class TempratureController : ControllerBase
     /// dfgg
     /// </summary>
     /// // <remarks>
+    /// //Uodate
 
     private const string SmtpServer = "smtp.gmail.com";
     private const int SmtpPort = 587;
