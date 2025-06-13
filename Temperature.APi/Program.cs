@@ -27,9 +27,11 @@ builder.Services.AddScoped<IDbConnection>(provider =>
 
 builder.WebHost.UseKestrel(options =>
 {
-    options.ListenAnyIP(2000);
+    options.ListenAnyIP(2000, listenOptions =>
+    {
+        listenOptions.UseHttps(); // uses dev cert automatically
+    });
 });
-
 var app = builder.Build();
 app.UseSwagger();
 app.UseSwaggerUI();
