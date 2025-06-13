@@ -1,9 +1,12 @@
+using Common.BotNatia.MesageSender;
+
 var builder = WebApplication.CreateBuilder(args);
 
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddSingleton<BootSendInfo>();
 
 //
 builder.Services.AddHttpClient();

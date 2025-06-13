@@ -1,9 +1,13 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.12.35707.178 d17.12
+VisualStudioVersion = 17.12.35707.178
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Temperature.APi", "Temperature.APi\Temperature.APi.csproj", "{BCB05113-8557-4B49-A53D-F336F2147443}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Temperature.APi", "Temperature.APi\Temperature.APi.csproj", "{BCB05113-8557-4B49-A53D-F336F2147443}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Common", "Common", "{F4D0C0AA-BF45-4765-B1D8-946C17964AA7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Common.BotNatia", "Common.BotNatia\Common.BotNatia.csproj", "{791D692B-AB7F-4DA6-81D2-2E60440017B0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,8 +19,18 @@ Global
 		{BCB05113-8557-4B49-A53D-F336F2147443}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BCB05113-8557-4B49-A53D-F336F2147443}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BCB05113-8557-4B49-A53D-F336F2147443}.Release|Any CPU.Build.0 = Release|Any CPU
+		{791D692B-AB7F-4DA6-81D2-2E60440017B0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{791D692B-AB7F-4DA6-81D2-2E60440017B0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{791D692B-AB7F-4DA6-81D2-2E60440017B0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{791D692B-AB7F-4DA6-81D2-2E60440017B0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{791D692B-AB7F-4DA6-81D2-2E60440017B0} = {F4D0C0AA-BF45-4765-B1D8-946C17964AA7}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {75FEBD2C-C8DC-4E8B-BCC5-568A9362EAE3}
 	EndGlobalSection
 EndGlobal
