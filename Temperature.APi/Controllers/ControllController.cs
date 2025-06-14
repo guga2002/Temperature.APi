@@ -1,5 +1,7 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using Common.BotNatia.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Caching.Memory;
 using System.Diagnostics;
 
 namespace Temperature.Api.Controllers;
@@ -10,14 +12,30 @@ public class ControllController : ControllerBase
 {
     private static DateTime _lastBeat = DateTime.MinValue;
     private static readonly object _beatLock = new();
+    private readonly IMemoryCache _memoryCache;
     private readonly ILogger<ControllController> _logger;
 
     private const string ProcessName = "Natia.UI";
     private const string ExePath = @"C:\Users\MONITORING PC\source\repos\Natia.UI\Natia.UI\bin\Release\net8.0\publish\Natia.UI.exe";
 
-    public ControllController(ILogger<ControllController> logger)
+    public ControllController(ILogger<ControllController> logger, IMemoryCache memoryCache)
     {
         _logger = logger;
+        _memoryCache = memoryCache;
+    }
+
+    [HttpGet("SystemStreamInfo")]
+    public IActionResult GetSystemInfo()
+    {
+        var redis = _memoryCache.Get<List<MulticastAnalysisResult>>("SystemStreamInfo");
+        return Ok(redis);
+    }
+
+    [HttpGet("GetRobotSay")]
+    public IActionResult GetStreamAnalytics()
+    {
+        var redis = _memoryCache.Get<List<string>>("letscheck");
+        return Ok(redis);
     }
 
     [HttpGet("heartbeat/{fromRobot}")]
