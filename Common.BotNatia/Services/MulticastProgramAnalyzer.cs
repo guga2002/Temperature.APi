@@ -262,6 +262,7 @@ public class MulticastProgramAnalyzer
                 foreach (var prog in result.Programs.Where(p => programs.Contains(p.ProgramId)))
                 {
                     prog.IsProblematic = true;
+                    prog.Streams ??= new List<StreamInfo>();
                     prog.Streams.Add(new StreamInfo
                     {
                         Type = "Conflicting PID",
