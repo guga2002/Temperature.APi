@@ -1,6 +1,13 @@
 ﻿using Common.BotNatia.Interfaces;
+using Concentus.Enums;
+using Concentus.Oggfile;
+using Concentus.Structs;
 using Dapper;
+using Microsoft.VisualBasic;
+using NAudio.Wave;
 using System.Data;
+using System.Diagnostics;
+using System.Speech.Synthesis;
 using System.Text.RegularExpressions;
 
 namespace Common.BotNatia.Services;
@@ -86,4 +93,88 @@ public class ChanellServices: IChanellServices
         return result.AsList();
     }
 
+    public async Task<byte[]> SpeakNow(string text, int baseRate = 2)
+    {
+        try
+        {
+            Random random = new Random();
+            await Task.Delay(1);
+
+            using (var synthesizer = new SpeechSynthesizer())
+            using (var memoryStream = new MemoryStream())
+            {
+                var voices = synthesizer.GetInstalledVoices()
+                                         .Where(voice => voice.Enabled)
+                                         .ToList();
+
+                var selectedVoice = voices.FirstOrDefault(voice =>
+                    voice.VoiceInfo.Culture.Name.StartsWith("ka-GE") &&
+                    voice.VoiceInfo.Name.Contains("Nati"));
+
+                if (selectedVoice != null)
+                {
+                    synthesizer.SelectVoice(selectedVoice.VoiceInfo.Name);
+
+                    synthesizer.Rate = baseRate + random.Next(-2, 3);
+                    synthesizer.Volume = random.Next(75, 101);
+
+                    synthesizer.SetOutputToWaveStream(memoryStream);
+
+                    synthesizer.Speak(text);
+
+                    return memoryStream.ToArray();
+                }
+                else
+                {
+                    Console.WriteLine("No matching voice found.");
+                    return null;
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error while speaking: {ex.Message}");
+            return null;
+        }
+    }
+
+
+    public async Task<Stream> ConvertWavToOggStreamAsync(byte[] wavData)
+    {
+        var ffmpegPath = @"C:\Tools\ffmpeg-master-latest-win64-gpl-shared\bin\ffmpeg.exe";
+
+        var process = new Process
+        {
+            StartInfo = new ProcessStartInfo
+            {
+                FileName = ffmpegPath,
+                Arguments = "-i pipe:0 -c:a libopus -b:a 64k -f ogg pipe:1",
+                RedirectStandardInput = true,
+                RedirectStandardOutput = true,
+                RedirectStandardError = true,
+                UseShellExecute = false,
+                CreateNoWindow = true
+            }
+        };
+
+        process.Start();
+
+        await process.StandardInput.BaseStream.WriteAsync(wavData);
+        await process.StandardInput.BaseStream.FlushAsync();
+        process.StandardInput.Close();
+
+        var oggStream = new MemoryStream();
+        await process.StandardOutput.BaseStream.CopyToAsync(oggStream);
+        oggStream.Position = 0;
+
+        string errorLog = await process.StandardError.ReadToEndAsync();
+        await process.WaitForExitAsync();
+
+        if (process.ExitCode != 0)
+        {
+            throw new Exception($"FFmpeg failed. Error: {errorLog}");
+        }
+
+        return oggStream;
+    }
 }
