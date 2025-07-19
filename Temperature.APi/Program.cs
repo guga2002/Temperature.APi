@@ -9,12 +9,12 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-//builder.Services.AddScoped<MulticastProgramAnalyzer>();
+builder.Services.AddScoped<MulticastProgramAnalyzer>();
 builder.Services.AddSingleton<BootSendInfo>();
 builder.Services.AddScoped<IChanellServices,ChanellServices>();
 builder.Services.AddHostedService<ChanellChecker>();
 builder.Services.AddHostedService<MentionResponderService>();
-//builder.Services.AddHostedService<StreamAnalytics>();
+builder.Services.AddHostedService<StreamAnalytics>();
 builder.Services.AddHttpClient();
 builder.Services.AddMemoryCache();
 
@@ -31,7 +31,7 @@ builder.WebHost.UseKestrel(options =>
 {
     options.ListenAnyIP(2000, listenOptions =>
     {
-        listenOptions.UseHttps(); // uses dev cert automatically
+        listenOptions.UseHttps();
     });
 });
 var app = builder.Build();

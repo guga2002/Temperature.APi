@@ -8,7 +8,7 @@ public class BootSendInfo
     public async Task SentMessageToTelegram(string Message)
     {
         var botToken = "7992931942:AAHAfog7gNKm1yaAoNe4FZeEhdjmet2Zi7U";
-        var chatId = -1002573516355;
+        var chatId = -1002817849163;
 
         var botClient = new TelegramBotClient(botToken);
 
