@@ -197,7 +197,11 @@ public class MentionResponderService : BackgroundService
     {
         try
         {
-            var _httpClient =new HttpClient();
+            var handler = new HttpClientHandler()
+            {
+                ServerCertificateCustomValidationCallback = (a, b, c, d) => true
+            };
+            var _httpClient =new HttpClient(handler);
             var response = await _httpClient.GetAsync("https://192.168.0.79:2000/api/Temprature/GetCurrentTemperature");
 
             if (!response.IsSuccessStatusCode)
