@@ -90,10 +90,8 @@ public class ChanellChecker : BackgroundService
             var message = BuildAlertMessage(currentCount, chanells, severity);
             await _telegramService.SentMessageToTelegram(message);
 
-            // Optionally: Create and assign tasks in CSI here (placeholder)
             await AutoAssignTasksAsync(chanells, severity);
 
-            // Set cooldown (different for severity)
             _cache.Set(LastAlertKey, true, TimeSpan.FromMinutes(severity == "Critical" ? 10 : 30));
         }
     }
@@ -217,31 +215,21 @@ public class ChanellChecker : BackgroundService
     {
         try
         {
-            var updates = await _botClient.GetUpdatesAsync();
-            foreach (var update in updates)
-            {
-                if (update.Message?.Text is not { } text) continue;
+            //var updates = await _botClient.GetUpdatesAsync();
+            //foreach (var update in updates)
+            //{
+            //    if (update.Message?.Text is not { } text) continue;
 
-                if (text.StartsWith("/status"))
-                {
-                    var currentCount = _cache.TryGetValue(LastCountKey, out int cnt) ? cnt : 0;
-                    await _telegramService.SentMessageToTelegram($"📡 Monitoring active. Current outages: {currentCount}");
-                }
-                else if (text.StartsWith("/report"))
-                {
-                    var report = BuildDailyReport();
-                    await _telegramService.SentMessageToTelegram(report);
-                }
-                else if (text.StartsWith("/mute"))
-                {
-                    var parts = text.Split(' ');
-                    if (parts.Length > 1 && int.TryParse(parts[1], out var mins))
-                    {
-                        _cache.Set(MuteAlertsKey, DateTime.UtcNow.AddMinutes(mins), TimeSpan.FromMinutes(mins + 1));
-                        await _telegramService.SentMessageToTelegram($"🔇 Alerts muted for {mins} minutes.");
-                    }
-                }
-            }
+            //    if (text.StartsWith("mute"))
+            //    {
+            //        var parts = text.Split(' ');
+            //        if (parts.Length > 1 && int.TryParse(parts[1], out var mins))
+            //        {
+            //            _cache.Set(MuteAlertsKey, DateTime.UtcNow.AddMinutes(mins), TimeSpan.FromMinutes(mins + 1));
+            //            await _telegramService.SentMessageToTelegram($"🔇 Alerts muted for {mins} minutes.");
+            //        }
+            //    }
+            //}
         }
         catch (Exception ex)
         {

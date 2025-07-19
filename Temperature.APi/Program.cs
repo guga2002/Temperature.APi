@@ -9,7 +9,6 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-builder.Services.AddScoped<MulticastProgramAnalyzer>();
 builder.Services.AddSingleton<BootSendInfo>();
 builder.Services.AddScoped<IChanellServices,ChanellServices>();
 builder.Services.AddHostedService<ChanellChecker>();

@@ -86,22 +86,22 @@ public class MentionResponderService : BackgroundService
         if (text.Contains("სტატუსი", StringComparison.OrdinalIgnoreCase))
             return await GetStatusAsync();
 
-        if (text.Contains("/uptime"))
+        if (text.ToLower().Contains("uptime"))
         {
             var uptime = DateTime.UtcNow - _startedAt;
             return $"⏱️ ბოტი მუშაობს {uptime.TotalHours:F1} საათია (`{uptime:hh\\:mm\\:ss}`)";
         }
 
-        if (text.Contains("/ბოლოგათიშვა"))
+        if (text.Contains("ბოლოგათიშვა"))
             return await GetLastCriticalAsync();
 
         if (text.Contains("ტემპერატურა", StringComparison.OrdinalIgnoreCase) || text.Contains("humidity", StringComparison.OrdinalIgnoreCase))
             return await GetTemperatureAsync();
 
-        if (text.Contains("/ანალიტიკა"))
+        if (text.Contains("ანალიტიკა"))
             return await GetAnalyticsAsync();
 
-        if (text.Contains("/შეფასება") || text.Contains("/feedback"))
+        if (text.Contains("შეფასება") || text.ToLower().Contains("feedback"))
         {
             var feedback = await GetNatiaFeedbackAsync();
             return feedback != null
@@ -109,7 +109,7 @@ public class MentionResponderService : BackgroundService
                 : "⚠️ შეფასება ამ დროისთვის მიუწვდომელია.";
         }
 
-        if (text.Contains("/help") || text.Contains("დახმარება", StringComparison.OrdinalIgnoreCase))
+        if (text.ToLower().Contains("help") || text.Contains("დახმარება", StringComparison.OrdinalIgnoreCase))
             return GetHelpText();
 
         return "🤖 გამოიყენეთ `help` ან `დახმარება` ბრძანებები.";
@@ -225,13 +225,13 @@ public class MentionResponderService : BackgroundService
     {
         return @"🛠 *ნათიას მხარდაჭერილი ბრძანებები*:
 🟢 `@NatiaAlert_bot სტატუსი` – არხების სტატუსი  
-📊 `/ანალიტიკა` – ბოლო 24 საათის ლოგების ანალიზი  
-📡 `/ბოლოგათიშვა` – ბოლო კრიტიკული შეცდომა  
+📊 `ანალიტიკა` – ბოლო 24 საათის ლოგების ანალიზი  
+📡 `ბოლოგათიშვა` – ბოლო კრიტიკული შეცდომა  
 🌡️ `ტემპერატურა` ან `humidity` – სადგურის მონაცემები  
 👋 `გამარჯობა` – მისალმება  
-⏱ `/uptime` – ბოტის მუშაობის დრო  
-💬 `/შეფასება` ან `/feedback` – ნათიას შეფასება  
-❓ `/help` ან `დახმარება` – ყველა ბრძანების ნახვა";
+⏱ `uptime` – ბოტის მუშაობის დრო  
+💬 `შეფასება` ან `feedback` – ნათიას შეფასება  
+❓ `help` ან `დახმარება` – ყველა ბრძანების ნახვა";
     }
 
     private Task HandleErrorAsync(ITelegramBotClient bot, Exception ex, CancellationToken ct)
